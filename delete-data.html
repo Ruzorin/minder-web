@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veri Silme Politikası — Minder</title>
+  <meta name="description"
+    content="Minder Veri Silme Politikası (Data Deletion Policy): Tamamen anonim kampüs ağı. Cihaz Kimliği ile verilerinizi kalıcı olarak silebilirsiniz." />
+  <meta name="theme-color" content="#0a0e1a" />
+
+  <!-- Favicon & app ikonları -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/assets/img/favicon-32.png" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'minder-bg': '#0a0e1a',
+            'minder-surface': '#111726',
+            'minder-line': '#1b2440',
+            'minder-accent': '#7c5cff',
+            'minder-accent2': '#22d3ee',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-minder-bg text-white font-sans antialiased selection:bg-minder-accent/40">
+
+  <main class="min-h-screen relative overflow-hidden bg-grid">
+    <!-- Arka plan ışıltıları -->
+    <div class="pointer-events-none absolute inset-0 overflow-hidden">
+      <div class="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-minder-accent/20 blur-[130px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[26rem] w-[26rem] rounded-full bg-minder-accent2/10 blur-[130px]"></div>
+      <div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-minder-accent/10 blur-[120px]"></div>
+    </div>
+
+    <!-- Üst bar -->
+    <header class="relative z-10 flex items-center justify-between px-6 py-6 sm:px-10 lg:px-16">
+      <a href="index.html" class="flex items-center gap-2.5 transition-opacity hover:opacity-80">
+        <img src="/assets/img/logo.png" alt="Minder logosu"
+          class="h-9 w-auto drop-shadow-[0_0_10px_rgba(124,92,255,0.35)]" />
+        <span class="text-xl font-extrabold tracking-tight">Minder</span>
+      </a>
+      <nav class="flex items-center gap-1 text-sm">
+        <a href="privacy.html"
+          class="rounded-lg px-3 py-2 font-medium text-white/60 transition-colors hover:text-white hover:bg-white/5">Gizlilik</a>
+        <a href="terms.html"
+          class="rounded-lg px-3 py-2 font-medium text-white/60 transition-colors hover:text-white hover:bg-white/5">Şartlar</a>
+        <a href="delete-data.html"
+          class="rounded-lg px-3 py-2 font-medium text-white/90 bg-white/5 ring-1 ring-white/10">Veri Silme</a>
+      </nav>
+    </header>
+
+    <!-- İçerik -->
+    <article class="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-6 sm:px-10">
+      <span
+        class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/70">
+        🗑️ Yasal Belge
+      </span>
+
+      <h1 class="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+        Minder
+        <span
+          class="bg-gradient-to-r from-minder-accent via-violet-400 to-minder-accent2 bg-clip-text text-transparent">Veri
+          Silme Politikası</span>
+      </h1>
+      <p class="mt-2 text-sm font-medium text-white/40">Data Deletion Policy</p>
+
+      <p class="mt-4 text-sm text-white/40">Son güncelleme: 2 Temmuz 2026</p>
+
+      <!-- Giriş paragrafı -->
+      <div class="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6">
+        <p class="leading-relaxed text-white/70">
+          Minder (Kampüs Ağı) tamamen anonim bir sosyal ağdır. Kullanıcılarımızdan <strong class="text-white">isim,
+            soyisim, telefon numarası veya e-posta adresi TALEP ETMEYİZ ve SAKLAMAYIZ.</strong> Kimliğiniz sadece
+          cihazınızda üretilen kriptografik bir <strong class="text-minder-accent2">"Cihaz Kimliği" (Device ID)</strong>
+          ile korunur.
+        </p>
+      </div>
+
+      <!-- Bölüm 1: Verilerimi Nasıl Silebilirim? -->
+      <section class="mt-10">
+        <h2 class="flex items-center gap-3 text-2xl font-bold text-white">
+          <span
+            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-minder-accent/15 text-minder-accent ring-1 ring-minder-accent/30">1</span>
+          Verilerimi Nasıl Silebilirim?
+        </h2>
+        <p class="mt-4 leading-relaxed text-white/60">
+          Sistemde hiçbir kişisel bilginiz (e-posta vb.) bulunmadığı için, verilerinizi silme talebinde bulunurken o
+          hesabın size ait olduğunu kanıtlamanız gerekmektedir. Bunu sadece size özel olan <strong
+            class="text-white/90">Cihaz Kimliğinizi (Device ID)</strong> kullanarak yapabilirsiniz.
+        </p>
+        <p class="mt-4 font-medium text-white/80">Lütfen verilerinizin tamamen silinmesi için şu 3 basit adımı izleyin:
+        </p>
+
+        <!-- Adım kartları -->
+        <ol class="mt-5 space-y-4">
+          <li
+            class="group flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:border-minder-accent/30 hover:bg-white/[0.07]">
+            <span
+              class="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-br from-minder-accent to-minder-accent2 text-base font-extrabold text-white shadow-lg shadow-minder-accent/20">1</span>
+            <div>
+              <p class="font-semibold text-white">Minder uygulamasını açın</p>
+              <p class="mt-1 text-sm text-white/60">ve "Profil" sekmesine gidin.</p>
+            </div>
+          </li>
+          <li
+            class="group flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:border-minder-accent/30 hover:bg-white/[0.07]">
+            <span
+              class="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-br from-minder-accent to-minder-accent2 text-base font-extrabold text-white shadow-lg shadow-minder-accent/20">2</span>
+            <div>
+              <p class="font-semibold text-white">Cihaz Kimliğinizi kopyalayın</p>
+              <p class="mt-1 text-sm text-white/60">Profilinizde yer alan <span
+                  class="font-mono text-minder-accent2">"Cihaz Kimliği" (Device ID)</span> kodunuzu kopyalayın veya not
+                alın.</p>
+            </div>
+          </li>
+          <li
+            class="group flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:border-minder-accent/30 hover:bg-white/[0.07]">
+            <span
+              class="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-br from-minder-accent to-minder-accent2 text-base font-extrabold text-white shadow-lg shadow-minder-accent/20">3</span>
+            <div>
+              <p class="font-semibold text-white">Bize e-posta gönderin</p>
+              <p class="mt-1 text-sm text-white/60">
+                <a href="mailto:destek@minder.app"
+                  class="font-medium text-minder-accent2 underline decoration-minder-accent2/40 underline-offset-4 hover:decoration-minder-accent2">destek@minder.app</a>
+                adresinden, e-postanın konu başlığına <span class="font-mono text-minder-accent2">"Veri Silme Talebi -
+                  [Cihaz Kimliğiniz]"</span> yazarak bir e-posta gönderin.
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <div class="mt-6 rounded-2xl border border-minder-accent/20 bg-minder-accent/5 p-5">
+          <p class="leading-relaxed text-white/70">
+            Talebiniz bize ulaştığında, sistem yöneticilerimiz belirttiğiniz cihaza ait tüm verileri (gönderiler,
+            etkileşimler vb.) sunucularımızdan <strong class="text-white">kalıcı ve geri döndürülemez</strong> bir
+            şekilde manuel olarak silecektir. İşlem tamamlandığında size e-posta üzerinden bilgi verilecektir.
+          </p>
+        </div>
+      </section>
+
+      <!-- Bölüm 2: Erişimim Yoksa -->
+      <section class="mt-12">
+        <h2 class="flex items-center gap-3 text-2xl font-bold text-white">
+          <span
+            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-minder-accent/15 text-minder-accent ring-1 ring-minder-accent/30">2</span>
+          Uygulamaya Erişimim Yoksa Ne Yapmalıyım?
+        </h2>
+        <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-6">
+          <p class="leading-relaxed text-white/60">
+            Eğer uygulamanın yüklü olduğu cihazınızı kaybettiyseniz veya Cihaz Kimliğinize erişemiyorsanız, anonim
+            yapımız gereği sunucularımızdaki milyonlarca veri arasından hangisinin size ait olduğunu bulmamız <strong
+              class="text-white/90">teknik olarak imkansızdır.</strong> Veri güvenliğiniz için cihaz kimlikleri
+            sunucularımızda <strong class="text-white/90">şifrelenmiş olarak tutulur</strong> ve hiçbir dış kimlikle
+            eşleştirilmez.
+          </p>
+        </div>
+      </section>
+
+      <!-- Bölüm 3: İletişim -->
+      <section class="mt-12">
+        <h2 class="flex items-center gap-3 text-2xl font-bold text-white">
+          <span
+            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-minder-accent/15 text-minder-accent ring-1 ring-minder-accent/30">3</span>
+          İletişim
+        </h2>
+        <p class="mt-4 leading-relaxed text-white/60">
+          Talepleriniz ve veri güvenliği politikalarımız hakkında daha fazla bilgi almak için bizimle iletişime
+          geçebilirsiniz:
+        </p>
+        <a href="mailto:destek@minder.app"
+          class="mt-5 inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 transition-all hover:border-minder-accent/40 hover:bg-white/[0.08]">
+          <span
+            class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-minder-accent to-minder-accent2 text-lg">✉️</span>
+          <span>
+            <span class="block text-xs font-medium uppercase tracking-wide text-white/40">E-posta</span>
+            <span class="text-lg font-semibold text-white">destek@minder.app</span>
+          </span>
+        </a>
+      </section>
+
+      <!-- Alt navigasyon -->
+      <div class="mt-14 flex flex-col items-center gap-3 border-t border-white/10 pt-8 sm:flex-row sm:justify-between">
+        <a href="index.html"
+          class="inline-flex items-center gap-2 text-sm font-medium text-white/60 transition-colors hover:text-white">
+          ← Ana sayfaya dön
+        </a>
+        <div class="flex items-center gap-3">
+          <a href="privacy.html"
+            class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10">
+            Gizlilik Politikası
+          </a>
+          <a href="terms.html"
+            class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10">
+            Kullanım Şartları
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Çocuk Güvenliği ve CSAM Standartları — Minder</title>
+  <meta name="description"
+    content="Minder Çocuk Güvenliği ve CSAM Standartları Politikası: Çocuk istismarına karşı sıfır tolerans, anında kaldırma, cihaz banı ve kolluk kuvvetlerine raporlama." />
+  <meta name="theme-color" content="#0a0e1a" />
+
+  <!-- Favicon & app ikonları -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/assets/img/favicon-32.png" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'minder-bg': '#0a0e1a',
+            'minder-surface': '#111726',
+            'minder-line': '#1b2440',
+            'minder-accent': '#7c5cff',
+            'minder-accent2': '#22d3ee',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-minder-bg text-white font-sans antialiased selection:bg-minder-accent/40">
+
+  <main class="min-h-screen relative overflow-hidden bg-grid">
+    <!-- Arka plan ışıltıları -->
+    <div class="pointer-events-none absolute inset-0 overflow-hidden">
+      <div class="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-minder-accent/20 blur-[130px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[26rem] w-[26rem] rounded-full bg-minder-accent2/10 blur-[130px]"></div>
+    </div>
+
+    <!-- Üst bar -->
+    <header class="relative z-10 flex items-center justify-between px-6 py-6 sm:px-10 lg:px-16">
+      <a href="index.html" class="flex items-center gap-2.5 transition-opacity hover:opacity-80">
+        <img src="/assets/img/logo.png" alt="Minder logosu"
+          class="h-9 w-auto drop-shadow-[0_0_10px_rgba(124,92,255,0.35)]" />
+        <span class="text-xl font-extrabold tracking-tight">Minder</span>
+      </a>
+      <nav class="flex items-center gap-1 text-sm">
+        <a href="privacy.html"
+          class="rounded-lg px-3 py-2 font-medium text-white/60 transition-colors hover:text-white hover:bg-white/5">Gizlilik</a>
+        <a href="terms.html"
+          class="rounded-lg px-3 py-2 font-medium text-white/60 transition-colors hover:text-white hover:bg-white/5">Şartlar</a>
+        <a href="safety.html"
+          class="rounded-lg px-3 py-2 font-medium text-white/90 bg-white/5 ring-1 ring-white/10">Güvenlik</a>
+      </nav>
+    </header>
+
+    <!-- İçerik -->
+    <article class="relative z-10 mx-auto max-w-3xl px-6 pb-20 pt-6 sm:px-10">
+      <span
+        class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-white/70">
+        🛡️ Yasal Belge
+      </span>
+
+      <h1 class="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+        Çocuk Güvenliği ve
+        <span
+          class="bg-gradient-to-r from-minder-accent via-violet-400 to-minder-accent2 bg-clip-text text-transparent">CSAM
+          Standartları</span>
+      </h1>
+
+      <p class="mt-4 text-sm text-white/40">Son güncelleme: 29 Haziran 2026</p>
+
+      <div class="mt-10 space-y-10">
+        <section>
+          <h2 class="text-xl font-bold text-white">1. Giriş</h2>
+          <p class="mt-3 leading-relaxed text-white/60">
+            Minder (Kampüs Ağı), kullanıcılarının güvenliğine en yüksek önemi verir. Platformumuz 17 yaş ve üzeri (17+)
+            kampüs öğrencileri için tasarlanmış olsa da, platformumuzda Çocuğun Cinsel İstismarı ve Sömürüsüne (CSAE)
+            veya
+            Çocuk Cinsel İstismarı Materyallerine (CSAM) karşı <strong class="text-white/90">SIFIR TOLERANS</strong>
+            politikası uygulamaktayız.
+          </p>
+        </section>
+
+        <!-- Sıfır tolerans vurgusu -->
+        <section class="rounded-2xl border border-red-500/20 bg-red-500/5 p-6">
+          <h2 class="flex items-center gap-2 text-xl font-bold text-white">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/20 text-red-400">⛔</span>
+            2. İhlal Durumunda Uygulanacak İşlemler
+          </h2>
+          <p class="mt-3 leading-relaxed text-white/70">
+            Sistemlerimizde (Yapay Zeka Moderasyon Filtreleri ve Kullanıcı Bildirimleri aracılığıyla) CSAM veya çocuk
+            istismarını teşvik eden herhangi bir içerik tespit edildiğinde;
+          </p>
+          <ul class="mt-4 space-y-3">
+            <li class="flex gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+              <span class="mt-0.5 text-red-400">✕</span>
+              <span class="text-white/70">İlgili içerik <strong class="text-white/90">saniyesinde</strong> sunuculardan
+                ve
+                akıştan kalıcı olarak silinir.</span>
+            </li>
+            <li class="flex gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+              <span class="mt-0.5 text-red-400">✕</span>
+              <span class="text-white/70">İçeriği paylaşan kullanıcının cihazı <strong class="text-white/90">donanım
+                  kimliği (Device ID)</strong> üzerinden kalıcı olarak platformdan banlanır.</span>
+            </li>
+            <li class="flex gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+              <span class="mt-0.5 text-red-400">✕</span>
+              <span class="text-white/70">Elde edilen veriler gecikmeksizin <strong class="text-white/90">Ulusal ve
+                  Uluslararası kolluk kuvvetlerine</strong> (NCMEC vb.) raporlanır.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-white">3. Kullanıcı Bildirimleri</h2>
+          <p class="mt-3 leading-relaxed text-white/60">
+            Kullanıcılarımız, uygulama içindeki <strong class="text-white/90">“Şikayet Et (Report)”</strong> butonunu
+            kullanarak çocuk güvenliğini tehlikeye atan her türlü içeriği anında moderasyon ekibimize bildirebilirler.
+            Bildirimler <strong class="text-white/90">7/24 otonom sistemlerimiz</strong> tarafından öncelikli olarak
+            işlenir.
+          </p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div class="text-sm font-semibold text-white">🚩 Şikayet Et</div>
+              <p class="mt-1 text-sm text-white/60">Çocuk güvenliğini tehdit eden içeriği anında moderasyon ekibimize
+                bildir.</p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div class="text-sm font-semibold text-white">🤖 AI Moderasyon</div>
+              <p class="mt-1 text-sm text-white/60">Yapay zeka filtrelerimiz CSAM içeriği tespit ettiği an müdahale
+                eder.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-white">4. İletişim</h2>
+          <p class="mt-3 leading-relaxed text-white/60">
+            Bu politika hakkında sorularınız için: <a href="mailto:destek@minder.app"
+              class="font-medium text-minder-accent2 underline decoration-minder-accent2/40 underline-offset-4 hover:decoration-minder-accent2">destek@minder.app</a>
+          </p>
+        </section>
+      </div>
+
+      <!-- Alt navigasyon -->
+      <div class="mt-14 flex flex-col items-center gap-3 border-t border-white/10 pt-8 sm:flex-row sm:justify-between">
+        <a href="index.html"
+          class="inline-flex items-center gap-2 text-sm font-medium text-white/60 transition-colors hover:text-white">
+          ← Ana sayfaya dön
+        </a>
+        <a href="terms.html"
+          class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10">
+          Kullanım Şartları →
+        </a>
+      </div>
+    </article>
+  </main>
+</body>
+
+</html>

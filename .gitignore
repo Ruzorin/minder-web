@@ -1,0 +1,21 @@
+# Bağımlılıklar
+node_modules/
+
+# Vercel
+.vercel/
+
+# Ortam değişkenleri
+.env
+.env.local
+.env.*.local
+
+# Build çıktıları
+dist/
+build/
+
+# OS / Editör
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/

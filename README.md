@@ -136,12 +136,13 @@ minder-web/
 
 ## 🌍 Desteklenen Kampüsler
 
-| Kampüs | Şehir | Eduroam IP |
-|--------|-------|------------|
-| DAÜ | Gazimağusa, KKTC | 193.140.0.0/16 |
-| İTÜ | İstanbul, TR | 160.75.0.0/16 |
-| BOUN | İstanbul, TR | 139.179.0.0/16 |
-| ODTÜ | Ankara, TR | 144.122.0.0/16 |
+| Kampüs | Şehir | Durum |
+|--------|-------|-------|
+| DAÜ — Doğu Akdeniz Üniversitesi | Gazimağusa, KKTC | ✅ Aktif |
+| YDÜ — Yakın Doğu Üniversitesi | Lefkoşa, KKTC | 🕒 Yakında |
+| UKÜ — Uluslararası Kıbrıs Üniversitesi | Lefkoşa, KKTC | 🕒 Yakında |
+| LAÜ — Lefke Avrupa Üniversitesi | Lefke, KKTC | 🕒 Yakında |
+| ODTÜ KK — ODTÜ Kuzey Kıbrıs Kampüsü | Güzelyurt, KKTC | 🕒 Yakında |
 
 ---
 

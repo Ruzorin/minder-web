@@ -3,7 +3,7 @@
 > **Minder ana uygulamasının resmi web sitesi ve akıllı yönlendirme (Smart App Banner) sayfası.**
 > Minder mobil uygulamasının App Store / Google Play onay süreçlerini destekleyen hukuki sayfaları ve masaüstü ziyaretçileri mobil store'lara yönlendiren vitrin sayfası.
 
-🔗 **Canlı:** [minderweb.vercel.app](https://minderweb.vercel.app)
+🔗 **Canlı:** [minder.university](https://minder.university)
 
 ---
 
@@ -154,14 +154,14 @@ minder-web/
 - **Fake GPS:** Sahte konum tespiti → Eduroam'a zorlama
 - **AI moderasyon:** Tüm içerik yayınlanmadan önce denetlenir
 
-Detaylar için [Gizlilik Politikası](https://minderweb.vercel.app/privacy) ve [Kullanım Şartları](https://minderweb.vercel.app/terms) sayfalarına bakın.
+Detaylar için [Gizlilik Politikası](https://minder.university/privacy) ve [Kullanım Şartları](https://minder.university/terms) sayfalarına bakın.
 
 ---
 
 ## 📞 İletişim
 
 - **E-posta:** [destek@minder.app](mailto:destek@minder.app)
-- **Web:** [minderweb.vercel.app](https://minderweb.vercel.app)
+- **Web:** [minder.university](https://minder.university)
 
 ---
 

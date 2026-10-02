@@ -15,26 +15,8 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png" />
   <link rel="shortcut icon" href="/assets/img/favicon-32.png" />
 
-  <!-- Tailwind CSS (CDN) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'minder-bg': '#0a0e1a',
-            'minder-surface': '#111726',
-            'minder-line': '#1b2440',
-            'minder-accent': '#7c5cff',
-            'minder-accent2': '#22d3ee',
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
+  <!-- Tailwind CSS (statik build — FOUC yok) -->
+  <link rel="stylesheet" href="assets/css/tailwind.css" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

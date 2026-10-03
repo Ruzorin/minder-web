@@ -8,12 +8,14 @@
 
   // --- Yapılandırma --------------------------------------------
   var REDIRECT_DELAY_MS = 2000; // 2 saniye
-  var APP_STORE_URL = "#";      // TODO: App Store linki güncellenecek
-  var PLAY_STORE_URL = "#";     // TODO: Play Store linki güncellenecek
+  // App Store henüz yayında değil (onay bekliyor). Onaydan sonra buraya linki yaz:
+  var APP_STORE_URL = "#";
+  var PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=university.minder.app&hl=tr";
 
   // --- DOM referansları ----------------------------------------
   var redirectScreen = document.getElementById("redirect-screen");
   var redirectText = document.getElementById("redirect-text");
+  var redirectSub = document.getElementById("redirect-sub");
   var desktopContent = document.getElementById("desktop-content");
   var yearEl = document.getElementById("year");
 
@@ -32,7 +34,11 @@
 
   // --- Yönlendirme mantığı -------------------------------------
   if (isIOS) {
-    showRedirect("Seni App Store'a yönlendiriyoruz...", APP_STORE_URL);
+    if (APP_STORE_URL !== "#") {
+      showRedirect("Seni App Store'a yönlendiriyoruz...", APP_STORE_URL);
+    } else {
+      showPending("Minder yakında App Store'da.");
+    }
   } else if (isAndroid) {
     showRedirect("Seni Play Store'a yönlendiriyoruz...", PLAY_STORE_URL);
   } else {
@@ -42,6 +48,7 @@
   // --- Yardımcı fonksiyonlar -----------------------------------
   function showRedirect(message, url) {
     if (redirectText) redirectText.textContent = message;
+    if (redirectSub) redirectSub.textContent = "Lütfen bekleyin, yönlendiriliyorsun…";
     if (redirectScreen) redirectScreen.classList.remove("hidden");
     if (desktopContent) desktopContent.classList.add("hidden");
 
@@ -51,6 +58,14 @@
         window.location.href = url;
       }
     }, REDIRECT_DELAY_MS);
+  }
+
+  // Uygulama henüz store'da yokken gösterilir (App Store onayı bekleniyor)
+  function showPending(message) {
+    if (redirectText) redirectText.textContent = message;
+    if (redirectSub) redirectSub.textContent = "Onay sürecinde — yayınlandığında buradan indirebilirsin.";
+    if (redirectScreen) redirectScreen.classList.remove("hidden");
+    if (desktopContent) desktopContent.classList.add("hidden");
   }
 
   function showDesktop() {

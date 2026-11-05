@@ -19,7 +19,7 @@
 - **🛡️ Güvenlik Sistemleri** — Donanım parmak izi (SHA-256), Fake GPS kalkanı, kalıcı donanım banı, RLS güvenlik duvarı (`x-device-id` header).
 - **🎭 Yeraltı Kimlik Sistemi** — 100 Sıfat × 100 Figür = 10.000 kombinasyon (Örn: "Kaotik Engerek"). Zar At (Reroll) — 24 saat cooldown.
 - **📡 Akış Motoru** — Gravity algoritması: `score / (age_in_hours + 2)^1.8`. Infinite scroll, New / Hot / Controversial sıralama, realtime feed.
-- **🛡️ AI Moderasyon (Sıfır Maliyet)** — OpenAI Moderation API, 11 kategori kontrolü, otomatik Database Trigger ile webhook.
+- **🛡️ AI Moderasyon** — Yayın öncesi inceleme: kişisel bilgi filtresi + OpenAI Moderation + Google Gemini ile risk puanı; belirsiz içerikler insan incelemesine.
 - **👑 KKTCELL VIP Jeton** — Deep Link ile VIP öğrenci girişi, tek kullanımlık JWT token (60 sn self-destruct), altın neon rozet.
 - **📱 Ek Özellikler** — Bildirim merkezi, Yeraltı Arşivi, viral paylaşım (Instagram Story formatı).
 
@@ -32,7 +32,7 @@
 | Navigation | Expo Router 4.0 (file-based) |
 | State | Zustand 5.0 |
 | Backend | Supabase 2.45 (PostgreSQL + PostGIS + RLS) |
-| AI Moderasyon | OpenAI Moderation API (ücretsiz) |
+| AI Moderasyon | Google Gemini + OpenAI Moderation API |
 
 > ⚠️ **Not:** Minder ana mobil uygulaması (React Native + Supabase) **kapalı kaynaklıdır** ve bu repo'da yer almaz. Bu repo yalnızca web vitrini / landing page kodunu içerir.
 
@@ -161,7 +161,7 @@ Detaylar için [Gizlilik Politikası](https://minder.university/privacy) ve [Kul
 
 ## 📞 İletişim
 
-- **E-posta:** [destek@minder.app](mailto:destek@minder.app)
+- **E-posta:** [batinefeguldal2@gmail.com](mailto:batinefeguldal2@gmail.com)
 - **Web:** [minder.university](https://minder.university)
 
 ---

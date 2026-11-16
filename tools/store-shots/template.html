@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="tr">
+<!-- Minder mağaza ekran görüntüsü şablonu.
+     tools/gen-store-shots.js tarafından headless Chrome ile render edilir.
+     Parametreler:
+       ?shot=feed|locked|profile|compose|notifications|feature
+       ?platform=ios|play
+     Uygulama ekranı 390px tasarım genişliğinde kurulup hedef telefon boyutuna ölçeklenir.
+     Gönderi ve yorum metinleri web sitesindeki gibi bulanıktır. -->
+<head>
+  <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --accent: #7c5cff;
+      --accent2: #22d3ee;
+      --app-bg: #05060d;
+      --card: #0c0e1c;
+      --line: #1d2140;
+      --pw: 640px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; }
+    body {
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      color: #fff;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+    body:not(.feature) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3.8vh 6vw 3vh;
+      gap: 2.2vh;
+    }
+
+    /* ---------- Arka plan (web sitesi grid + yumuşak ışıltılar) ---------- */
+    .bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .bg .grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse at 50% 38%, #000 35%, transparent 85%);
+    }
+    .glow { position: absolute; border-radius: 50%; filter: blur(20vw); }
+    .g1 { width: 85vw; height: 85vw; left: -32vw; top: -22vw; background: rgba(124,92,255,.32); }
+    .g2 { width: 78vw; height: 78vw; right: -36vw; top: 48%; background: rgba(34,211,238,.15); }
+    .g3 { width: 70vw; height: 70vw; left: 15vw; bottom: -28vw; background: rgba(124,92,255,.26); }
+
+    /* ---------- Üst başlık ---------- */
+    .head { position: relative; z-index: 2; text-align: center; flex: none; max-width: 92vw; }
+    .brand {
+      display: inline-flex; align-items: center; gap: 0.9vh;
+      padding: 0.75vh 1.7vh; border-radius: 99px;
+      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05);
+      font-size: min(3vw, 1.7vh); font-weight: 600; color: rgba(255,255,255,.78);
+    }
+    .brand svg { width: min(3.6vw, 2.1vh); height: min(3.6vw, 2.1vh); }
+    h1 {
+      margin-top: 1.8vh;
+      font-size: min(9.4vw, 4.9vh);
+      line-height: 1.06;
+      font-weight: 900;
+      letter-spacing: -.035em;
+    }
+    .grad {
+      background: linear-gradient(90deg, var(--accent), #a78bfa 45%, var(--accent2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .sub {
+      margin-top: 1.3vh;
+      font-size: min(3.6vw, 1.95vh);
+      line-height: 1.4;
+      color: rgba(255,255,255,.58);
+      font-weight: 500;
+    }
+
+    /* ---------- Telefon çerçevesi ---------- */
+    .phone-wrap {
+      position: relative; z-index: 2;
+      flex: 1; min-height: 0; width: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .phone {
+      position: relative;
+      width: var(--pw);
+      aspect-ratio: 390 / 844;
+      border-radius: calc(var(--pw) * 0.142);
+      padding: calc(var(--pw) * 0.028);
+      background: linear-gradient(155deg, #272b42, #0d101d 38%, #0a0c16 68%, #252940);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.10),
+        0 calc(var(--pw) * 0.05) calc(var(--pw) * 0.22) rgba(124,92,255,.42),
+        0 calc(var(--pw) * 0.03) calc(var(--pw) * 0.09) rgba(0,0,0,.65);
+    }
+    .screen {
+      position: relative; width: 100%; height: 100%;
+      border-radius: calc(var(--pw) * 0.116);
+      overflow: hidden;
+      background: var(--app-bg);
+    }
+    body.play .phone {
+      border-radius: calc(var(--pw) * 0.102);
+      padding: calc(var(--pw) * 0.024);
+    }
+    body.play .screen {
+      border-radius: calc(var(--pw) * 0.080);
+    }
+
+    .app {
+      position: absolute; left: 0; top: 0;
+      width: 390px; height: 844px;
+      transform-origin: 0 0;
+      background: var(--app-bg);
+      overflow: hidden;
+      font-size: 14px;
+      display: flex; flex-direction: column;
+    }
+
+    /* ---------- Platform durum çubuğu & Home Indicator ---------- */
+    .status {
+      position: relative; flex: none;
+      height: 50px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 26px 0 28px;
+      font-weight: 600; font-size: 15px;
+    }
+    .island {
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+      width: 118px; height: 32px; border-radius: 18px; background: #000; z-index: 6;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.06);
+    }
+    .punch {
+      position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+      width: 16px; height: 16px; border-radius: 50%; background: #000; z-index: 6;
+      border: 1.5px solid #1b1f33;
+      box-shadow: inset 0 0 3px rgba(124,92,255,.25);
+    }
+    .s-icons { display: flex; gap: 6px; align-items: center; }
+    .bars { display: flex; gap: 2px; align-items: flex-end; height: 11px; }
+    .bars i { width: 3px; background: #fff; border-radius: 1px; }
+    .batt { width: 24px; height: 11.5px; border: 1.5px solid rgba(255,255,255,.5); border-radius: 3.5px; padding: 1.5px; position: relative; }
+    .batt::after { content: ""; position: absolute; right: -3.5px; top: 2.5px; width: 2px; height: 4px; border-radius: 0 1px 1px 0; background: rgba(255,255,255,.5); }
+    .batt i { display: block; height: 100%; width: 82%; background: #fff; border-radius: 1.5px; }
+
+    .home-bar {
+      position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%);
+      width: 132px; height: 5px; border-radius: 99px;
+      background: rgba(255,255,255,.32); z-index: 10;
+    }
+
+    /* ---------- Uygulama içi bileşenler (390px tasarım ölçeği) ---------- */
+    .content { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 18px 8px; }
+    .logo { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+    .logo svg { width: 25px; height: 25px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 99px;
+      font-size: 11.5px; font-weight: 600;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.85);
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399; }
+
+    .tabs { display: flex; gap: 8px; padding: 4px 18px 10px; }
+    .tab { padding: 6.5px 13px; border-radius: 99px; font-size: 12.5px; font-weight: 600; background: rgba(255,255,255,.07); color: rgba(255,255,255,.62); }
+    .tab.on { background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(124,92,255,.45); }
+
+    .list { padding: 0 14px; display: flex; flex-direction: column; gap: 10px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 17px; padding: 13px 15px; }
+
+    .meta { display: flex; align-items: center; gap: 10px; }
+    .av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; flex: none; }
+    .name { font-weight: 700; font-size: 13.5px; }
+    .when { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+    .cat { font-weight: 700; }
+    .more { margin-left: auto; color: rgba(255,255,255,.4); font-size: 17px; line-height: 1; }
+
+    .blur-box { position: relative; margin-top: 10px; }
+    .title { font-size: 15.5px; font-weight: 700; }
+    .body { margin-top: 5px; font-size: 13px; line-height: 1.45; color: rgba(255,255,255,.64); }
+    .blur { filter: blur(5.5px); user-select: none; }
+    .blur-s { filter: blur(4px); user-select: none; }
+    .lock-pill {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 11px; border-radius: 99px; white-space: nowrap;
+      background: rgba(10,14,26,.78); border: 1px solid rgba(124,92,255,.42);
+      backdrop-filter: blur(6px);
+      font-size: 11px; font-weight: 600; color: rgba(255,255,255,.88);
+      box-shadow: 0 4px 14px rgba(0,0,0,.4);
+    }
+
+    .actions { margin-top: 12px; display: flex; align-items: center; gap: 12px; font-size: 12.5px; color: rgba(255,255,255,.45); }
+    .vote { display: flex; align-items: center; gap: 8px; }
+    .vote b { color: #f43f5e; font-weight: 700; }
+    .yay { padding: 4px 10px; border-radius: 99px; border: 1px solid var(--line); color: #a78bfa; font-weight: 600; font-size: 11.5px; }
+    .cnt { margin-left: auto; }
+
+    /* Alt navigasyon */
+    .nav {
+      flex: none;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-around;
+      padding: 0 10px 8px;
+      background: linear-gradient(180deg, rgba(5,6,13,.85), var(--app-bg));
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+    body.ios .nav { height: 76px; padding-bottom: 16px; }
+    .nav .ic { width: 22px; height: 22px; color: rgba(255,255,255,.4); }
+    .nav .ic.on { color: var(--accent); }
+    .fab {
+      width: 48px; height: 48px; margin-top: -12px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 28px; font-weight: 300; color: #fff;
+      background: linear-gradient(135deg, var(--accent), #6366f1);
+      box-shadow: 0 6px 22px rgba(124,92,255,.6);
+    }
+
+    /* Bildirimler */
+    .hdr { display: flex; align-items: center; justify-content: space-between; padding: 6px 16px 12px; }
+    .hdr h2 { font-size: 18px; font-weight: 700; }
+    .iconbtn { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.06); font-size: 16px; }
+    .chip { padding: 6px 12px; border-radius: 99px; border: 1px solid rgba(124,92,255,.5); color: #c4b5fd; font-size: 12px; font-weight: 600; background: rgba(124,92,255,.14); white-space: nowrap; }
+    .ntf { display: flex; gap: 12px; position: relative; padding: 11px 14px; }
+    .nic { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: rgba(124,92,255,.14); border: 1px solid rgba(124,92,255,.3); color: #a78bfa; font-size: 14px; flex: none; }
+    .ntf h4 { font-size: 13.5px; font-weight: 700; }
+    .ntf p { margin-top: 3px; font-size: 12px; line-height: 1.4; color: rgba(255,255,255,.64); }
+    .ntf small { display: block; margin-top: 4px; font-size: 11px; color: rgba(255,255,255,.38); }
+    .unread { position: absolute; right: 14px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+    /* Profil */
+    .ptitle { font-size: 26px; font-weight: 800; padding: 4px 18px 10px; letter-spacing: -.02em; }
+    .idcard { text-align: center; padding: 16px 14px 14px; background: radial-gradient(circle at 50% 0%, rgba(124,92,255,.22), var(--card) 72%); }
+    .tag { display: inline-block; padding: 3.5px 11px; border-radius: 99px; border: 1px solid rgba(124,92,255,.45); color: #a78bfa; font-size: 10px; font-weight: 700; letter-spacing: .14em; }
+    .nick { margin-top: 9px; font-size: 25px; font-weight: 800; letter-spacing: -.02em; }
+    .dice { display: inline-flex; gap: 7px; align-items: center; margin-top: 10px; padding: 8px 16px; border-radius: 12px; background: rgba(124,92,255,.16); border: 1px solid rgba(124,92,255,.45); color: #c4b5fd; font-weight: 700; font-size: 13.5px; }
+    .hint { margin-top: 7px; font-size: 11px; color: rgba(255,255,255,.42); }
+    .rows { padding: 8px 15px; }
+    .rows .row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .rows .row:last-child { border-bottom: 0; }
+    .rows .row span:first-child { color: rgba(255,255,255,.52); }
+    .rows .row span:last-child { font-weight: 700; }
+    .gem { text-align: center; padding: 12px 14px; }
+    .gem .lbl { font-size: 10.5px; font-weight: 800; letter-spacing: .14em; color: #fbbf24; }
+    .gem .big { margin-top: 4px; font-size: 26px; font-weight: 900; color: #fbbf24; }
+    .gem .tm { margin-top: 2px; font-size: 12px; color: rgba(255,255,255,.5); font-variant-numeric: tabular-nums; letter-spacing: .1em; }
+    .menugroup { padding: 0; overflow: hidden; }
+    .menu { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; font-size: 13.5px; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .menu:last-child { border-bottom: 0; }
+    .menu i { font-style: normal; color: rgba(255,255,255,.35); }
+
+    /* Gönderi oluştur */
+    .send { padding: 8px 16px; border-radius: 99px; background: linear-gradient(135deg, var(--accent), #6366f1); font-weight: 700; font-size: 13.5px; box-shadow: 0 4px 16px rgba(124,92,255,.5); }
+    .who { padding: 4px 18px 10px; font-size: 12.5px; color: rgba(255,255,255,.52); display: flex; gap: 6px; align-items: center; }
+    .chips { display: flex; gap: 6px; padding: 0 16px 14px; flex-wrap: wrap; }
+    .chips span { white-space: nowrap; padding: 6px 11px; border-radius: 99px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,.05); border: 1px solid var(--line); color: rgba(255,255,255,.65); }
+    .chips span.on { background: rgba(124,92,255,.22); border-color: rgba(124,92,255,.6); color: #ddd6fe; }
+    .field { margin: 0 16px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 15px; padding: 13px 15px; }
+    .field.big { min-height: 220px; border-color: rgba(124,92,255,.55); box-shadow: 0 0 0 4px rgba(124,92,255,.1); }
+    .caret { display: inline-block; width: 2px; height: 17px; background: var(--accent); vertical-align: -3px; margin-left: 3px; }
+    .loc-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 18px 0 16px; }
+    .loc { display: inline-flex; gap: 7px; align-items: center; padding: 8px 13px; border-radius: 99px; background: rgba(124,92,255,.12); border: 1px solid rgba(124,92,255,.4); color: #c4b5fd; font-weight: 600; font-size: 12.5px; }
+    .counter { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.45); font-variant-numeric: tabular-nums; }
+    .ai { margin: 16px; display: flex; gap: 10px; align-items: flex-start; padding: 13px 14px; border-radius: 14px; background: rgba(34,211,238,.06); border: 1px solid rgba(34,211,238,.22); font-size: 12px; line-height: 1.5; color: rgba(255,255,255,.68); }
+
+    /* Kilit ekranı (web sitesiyle aynı stil) */
+    .lock {
+      position: absolute; inset: 102px 0 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+      padding: 0 28px; text-align: center;
+      background: linear-gradient(rgba(5,6,13,.22), rgba(5,6,13,.62));
+      backdrop-filter: blur(3px);
+    }
+    .lockbox {
+      width: 74px; height: 74px; border-radius: 22px; display: grid; place-items: center;
+      border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.07);
+      box-shadow: 0 10px 38px rgba(124,92,255,.4);
+    }
+    .lock h3 { font-size: 19px; font-weight: 800; line-height: 1.3; }
+    .lock p { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.45; }
+    .verify {
+      margin-top: 4px; padding: 12px 20px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #6366f1);
+      font-weight: 700; font-size: 14px;
+      box-shadow: 0 8px 26px rgba(124,92,255,.55);
+    }
+
+    /* ---------- Google Play Özellik Grafiği (1024x500) ---------- */
+    body.feature .head { display: none; }
+    .fg {
+      position: relative; z-index: 2;
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px 0 64px;
+    }
+    .fg .txt { width: 575px; }
+    .fg .lg { display: flex; align-items: center; gap: 14px; font-size: 38px; font-weight: 900; letter-spacing: -.03em; }
+    .fg .lg svg { width: 44px; height: 44px; }
+    .fg h1 { margin-top: 18px; font-size: 46px; line-height: 1.08; }
+    .fg .badges { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .fg .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 99px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+      font-size: 14px; font-weight: 600; color: rgba(255,255,255,.86);
+    }
+    .fg .badge i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+    .fg .phone-wrap { flex: none; align-self: flex-start; width: auto; height: auto; margin-top: 34px; }
+    .fg .phone {
+      --pw: 272px;
+      width: var(--pw);
+      transform: rotate(-3.5deg);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 22px 70px rgba(124,92,255,.5), 0 12px 30px rgba(0,0,0,.65);
+    }
+    body.feature .g1 { width: 520px; height: 520px; left: -120px; top: -220px; filter: blur(110px); }
+    body.feature .g2 { width: 460px; height: 460px; right: -40px; top: 80px; filter: blur(110px); background: rgba(124,92,255,.36); }
+    body.feature .g3 { display: none; }
+    body.feature .grid { background-size: 40px 40px; }
+  </style>
+</head>
+
+<body>
+  <div class="bg"><div class="grid"></div><div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div></div>
+  <header class="head">
+    <div class="brand"><span class="lgslot"></span>Minder · Kampüs Ağı</div>
+    <h1 id="h1"></h1>
+    <p class="sub" id="sub"></p>
+  </header>
+  <div class="phone-wrap"><div class="phone"><div class="screen"><div class="app" id="app"></div></div></div></div>
+
+  <script>
+    const LOGO = `<svg viewBox="10 10 80 80"><defs><filter id="ng" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect x="30" y="30" width="40" height="40" fill="none" stroke="#9A7BFF" stroke-width="5" transform="rotate(45 50 50)" filter="url(#ng)"/><rect x="40" y="40" width="20" height="20" fill="#9A7BFF" transform="rotate(45 50 50)" filter="url(#ng)"/></svg>`;
+    const D_FILL = `<svg class="ic on" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" transform="rotate(45 12 12)" fill="currentColor"/></svg>`;
+    const D_LINE = `<svg class="ic" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2" transform="rotate(45 12 12)" fill="none" stroke="currentColor" stroke-width="2"/></svg>`;
+    const D_LINE_ON = D_LINE.replace('class="ic"', 'class="ic on"');
+    const D_FILL_OFF = D_FILL.replace('class="ic on"', 'class="ic"');
+
+    const q = new URLSearchParams(location.search);
+    const shot = q.get("shot") || "feed";
+    const platform = q.get("platform") === "play" ? "play" : "ios";
+    document.body.classList.add(platform);
+
+    const statusBar = () => {
+      const notch = platform === "ios" ? '<div class="island"></div>' : '<div class="punch"></div>';
+      const time = platform === "ios" ? "9:41" : "12:30";
+      const sig = platform === "ios"
+        ? `<span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8.5px"></i><i style="height:11px"></i></span>`
+        : `<svg width="13" height="11" viewBox="0 0 13 11"><path d="M1 10h11V1z" fill="#fff"/></svg>`;
+      return `${notch}<div class="status"><span>${time}</span><span class="s-icons">
+        ${sig}
+        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.6 3.6 0 0 0-4.8 0zM3.3 6.3l1.3 1.6a5.3 5.3 0 0 1 6.8 0l1.3-1.6a7.4 7.4 0 0 0-9.4 0zM.8 3.3l1.3 1.6a9.3 9.3 0 0 1 11.8 0l1.3-1.6a11.3 11.3 0 0 0-14.4 0z" fill="#fff"/></svg>
+        <span class="batt"><i></i></span></span></div>`;
+    };
+
+    const nav = (a) => `<div class="nav">${a === 0 ? D_FILL : D_FILL_OFF}<div class="fab">+</div>${a === 2 ? D_LINE_ON : D_LINE}</div>`;
+    const homeBar = () => platform === "ios" ? '<div class="home-bar"></div>' : "";
+
+    const post = (av, color, name, when, cat, catColor, title, body, up, cnt, showBadge) => `
+      <div class="card"><div class="meta"><div class="av" style="background:${color}">${av}</div>
+        <div><div class="name">${name}</div><div class="when">${when} · <span class="cat" style="color:${catColor}">${cat}</span></div></div><div class="more">⋮</div></div>
+        <div class="blur-box"><div class="title blur-s">${title}</div><div class="body blur">${body}</div>${showBadge ? '<span class="lock-pill">🔒 Kampüs içi içerik</span>' : ""}</div>
+        <div class="actions"><span class="vote">▲ <b>${up}</b> ▼</span><span class="yay">↗ Yay</span><span>💎</span><span class="cnt">◇ ${cnt}</span></div></div>`;
+
+    const POSTS = [
+      ["❄", "linear-gradient(135deg,#8b5cf6,#6d28d9)", "Titrek Avcı", "9 gün önce", "✦ Mizah", "#a78bfa", "Kampüs kedileri", "Kampüs kedileri artık bizden daha rahat. CL meydanında uzanıyorlar, herkes onları besliyor. Belki biz de kedi olmalıydık.", 16, 0, true],
+      ["◇", "linear-gradient(135deg,#f43f5e,#be123c)", "Görünmez Şövalye", "9 gün önce", "? Soru", "#34d399", "Yemekhane bugün ne var?", "Yemekhane bugün ne var? Birisi menüyü paylaşabilir mi? Sıraya girmeden bileyim, köfte varsa girmeyeceğim.", 51, 1, true],
+      ["✦", "linear-gradient(135deg,#22d3ee,#6366f1)", "Zehirli Mimar", "9 gün önce", "✦ İtiraf", "#f472b6", "Proficiency: writing bölümü", "250 kelime yaz dediler, ben 249 yazdım. 1 kelime eksik. Kaldım. 1 kelime yüzünden 1 yıl gitti.", 19, 0, true],
+      ["☾", "linear-gradient(135deg,#f59e0b,#ea580c)", "Gece Kuşu", "12 gün önce", "◆ Etkinlik", "#fbbf24", "Sahilde akustik gece", "Bu akşam saat dokuzda toplanıyoruz, gelen olursa buradan haber versin.", 64, 9, false],
+    ];
+
+    const feedScreen = (locked) => `${statusBar()}
+      <div class="content">
+        <div class="topbar"><div class="logo">${LOGO}Minder</div><span class="pill"><span class="dot"></span>DAÜ · Kampüste</span></div>
+        <div class="tabs"><span class="tab on">🔥 Sıcak</span><span class="tab">Yeni</span><span class="tab">İtiraf</span><span class="tab">Soru</span></div>
+        <div class="list" ${locked ? 'style="filter:blur(5px)"' : ''}>${POSTS.map(p => post(...p)).join("")}</div>
+        ${locked ? `<div class="lock"><div class="lockbox"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#7c5cff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <h3>İçeriği görmek için<br>kampüste olman gerekir</h3><p>Erişim yalnızca doğrulanmış kampüs koordinatları içinden sağlanır.</p><div class="verify">📍 Kampüs Konumunu Doğrula</div></div>` : ""}
+      </div>
+      ${nav(0)}${homeBar()}`;
+
+    const ntf = (icon, title, body, when, unread) => `<div class="card ntf"><div class="nic">${icon}</div><div><h4>${title}</h4><p>${body}</p><small>${when}</small></div>${unread ? '<span class="unread"></span>' : ""}</div>`;
+    const notificationsScreen = () => `${statusBar()}
+      <div class="content">
+        <div class="hdr"><div class="iconbtn">←</div><h2>Bildirimler</h2><span class="chip">Okundu</span></div>
+        <div class="list">
+          ${ntf("◆", "Gönderin patladı!", "Gönderin 50 upvote aldı! Kampüs seni konuşuyor.", "8 dakika önce", 1)}
+          ${ntf("◇", "Yeni yorum", 'Karanlık Karga yorum yaptı: <span class="blur">"Aynen kardeş, CL meydanı artık pazar yeri."</span>', "26 dakika önce", 1)}
+          ${ntf("◆", "Upvote yağmuru", "Gönderin 25 upvote aldı! Popülerler arasına girdin.", "2 saat önce", 1)}
+          ${ntf("◇", "Yeni yorum", 'Siber Kurt yorum yaptı: <span class="blur">"Ring otobüsü klasiği, her sabah aynı dram."</span>', "3 saat önce", 0)}
+          ${ntf("✶", "Rozet kazandın!", "İlk gönderini paylaştın! “İlk Kıvılcım” rozeti profiline eklendi.", "6 saat önce", 0)}
+          ${ntf("✦", "Tartışma başlattın", "Gönderin 15 upvote + 8 downvote aldı. Tartışmalılar arasında!", "7 saat önce", 0)}
+        </div>
+      </div>
+      ${nav(2)}${homeBar()}`;
+
+    const profileScreen = () => `${statusBar()}
+      <div class="content">
+        <div class="ptitle">Profil</div>
+        <div class="list">
+          <div class="card idcard"><span class="tag">YERALTI KİMLİĞİ</span><div class="nick">Korsan Patron</div>
+            <div class="dice">🎲 Zar At</div><div class="hint">24 saatte 1 kez zar atabilirsin</div></div>
+          <div class="card rows">
+            <div class="row"><span>◈ Cihaz</span><span class="blur-s">53B3D6AA</span></div>
+            <div class="row"><span>◆ Durum</span><span style="color:#34d399">Doğrulandı ✓</span></div>
+            <div class="row"><span>◇ Kampüs</span><span>DAÜ · Gazimağusa</span></div>
+            <div class="row"><span>📍 Konum</span><span style="color:#34d399">Kampüste ✅</span></div>
+          </div>
+          <div class="card gem"><div class="lbl">💎 ELMAS HAKKI</div><div class="big">3/3</div><div class="tm">Yenilenme 00:00:00</div></div>
+          <div class="card menugroup">
+            <div class="menu"><span>◈ &nbsp;Yeraltı Arşivi (Gönderilerim)</span><i>→</i></div>
+            <div class="menu"><span>⊘ &nbsp;Engellenen Kullanıcılar</span><i>→</i></div>
+            <div class="menu"><span>↗ &nbsp;Arkadaşlarına Öner</span><i>→</i></div>
+          </div>
+        </div>
+      </div>
+      ${nav(2)}${homeBar()}`;
+
+    const composeScreen = () => `${statusBar()}
+      <div class="content">
+        <div class="hdr"><div class="iconbtn">✕</div><h2>Yeni Gönderi</h2><span class="send">Gönder</span></div>
+        <div class="who"><span style="color:#7c5cff">▸</span> DAÜ · Anonim</div>
+        <div class="chips"><span class="on">✦ Genel</span><span>✶ İtiraf</span><span>? Soru</span><span>◆ Etkinlik</span><span>◇ Kayıp/Buluntu</span></div>
+        <div class="field" style="font-weight:700;font-size:15.5px"><span class="blur-s">Kütüphanedeki sessiz masa</span></div>
+        <div class="field big" style="font-size:14px;line-height:1.55;color:rgba(255,255,255,.8)"><span class="blur">Her gün aynı saatte üçüncü katta oturuyoruz ama bir türlü konuşamadım. Yarın da orada olacağım, belki bu kez cesaret ederim.</span><span class="caret"></span></div>
+        <div class="loc-row"><span class="loc">＋ Konum Ekle <span style="opacity:.65;font-weight:500">(opsiyonel)</span></span><span class="counter">128/2000</span></div>
+        <div class="ai"><span>🛡️</span><span>İçeriğin AI tarafından denetlenir. Küfür, hakaret, siber zorbalık anında silinir.</span></div>
+      </div>
+      ${homeBar()}`;
+
+    const SHOTS = {
+      feed: { h: 'Kampüsün<br><span class="grad">gerçek yüzü</span>', s: "Kampüsünde konuşulan her şey, tek akışta.", app: () => feedScreen(false) },
+      locked: { h: 'Sadece kampüste<br><span class="grad">olanlar içindir</span>', s: "Yalnızca doğrulanmış kampüs konumundan erişim.", app: () => feedScreen(true) },
+      profile: { h: 'Gizli<br><span class="grad">kimliğini seç</span>', s: "İsim yok, numara yok. Sadece takma adın.", app: profileScreen },
+      compose: { h: 'İçini<br><span class="grad">özgürce dök</span>', s: "İtiraf et, sor, paylaş. Tamamen anonim.", app: composeScreen },
+      notifications: { h: 'Kampüsün<br><span class="grad">gündemi ol</span>', s: "Gönderin patladığında ilk sen öğren.", app: notificationsScreen },
+    };
+
+    document.querySelectorAll(".lgslot").forEach(e => e.outerHTML = LOGO);
+
+    if (shot === "feature") {
+      document.body.classList.add("feature");
+      const fg = document.createElement("div");
+      fg.className = "fg";
+      fg.innerHTML = `<div class="txt"><div class="lg">${LOGO}Minder</div>
+        <h1>Minder sadece <span class="grad">kampüste olanlar</span> içindir.</h1>
+        <div class="badges">
+          <span class="badge"><i></i>DAÜ kampüs</span>
+          <span class="badge"><i></i>%100 anonim</span>
+          <span class="badge"><i></i>Sıfır kişisel veri</span>
+        </div></div>`;
+      const pw = document.querySelector(".phone-wrap");
+      fg.appendChild(pw);
+      document.body.appendChild(fg);
+      document.getElementById("app").innerHTML = feedScreen(false);
+    } else {
+      const S = SHOTS[shot] || SHOTS.feed;
+      document.getElementById("h1").innerHTML = S.h;
+      document.getElementById("sub").textContent = S.s;
+      document.getElementById("app").innerHTML = S.app();
+    }
+
+    function fit() {
+      const wrap = document.querySelector(".phone-wrap");
+      const phone = document.querySelector(".phone");
+      const scr = document.querySelector(".screen");
+      const app = document.getElementById("app");
+      if (!document.body.classList.contains("feature")) {
+        const maxW = Math.min(wrap.clientWidth * 0.94, window.innerWidth * 0.84);
+        const maxH = wrap.clientHeight;
+        let ph = maxH;
+        let pw = ph * (390 / 844);
+        if (pw > maxW) {
+          pw = maxW;
+          ph = pw * (844 / 390);
+        }
+        phone.style.setProperty("--pw", pw + "px");
+        phone.style.width = pw + "px";
+        phone.style.height = ph + "px";
+      }
+      const k = scr.clientWidth / 390;
+      app.style.transform = `scale(${k})`;
+      app.style.height = (scr.clientHeight / k) + "px";
+    }
+
+    fit();
+    window.addEventListener("resize", fit);
+    document.fonts.ready.then(() => { fit(); document.body.dataset.ready = "1"; });
+  </script>
+</body>
+</html>

@@ -335,32 +335,39 @@
     }
 
     /* ---------- Google Play Özellik Grafiği (1024x500) ---------- */
-    body.feature .head { display: none; }
+    body.feature .head,
+    body.feature > .phone-wrap { display: none; }
     .fg {
       position: relative; z-index: 2;
       width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 56px 0 64px;
+      padding: 0 42px 0 56px;
     }
-    .fg .txt { width: 575px; }
-    .fg .lg { display: flex; align-items: center; gap: 14px; font-size: 38px; font-weight: 900; letter-spacing: -.03em; }
-    .fg .lg svg { width: 44px; height: 44px; }
-    .fg h1 { margin-top: 18px; font-size: 46px; line-height: 1.08; }
-    .fg .badges { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .fg .txt { width: 520px; }
+    .fg .pill-top {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 13px; border-radius: 99px;
+      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05);
+      font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.78);
+    }
+    .fg .lg { margin-top: 16px; display: flex; align-items: center; gap: 12px; font-size: 32px; font-weight: 900; letter-spacing: -.03em; }
+    .fg .lg svg { width: 38px; height: 38px; }
+    .fg h1 { margin-top: 12px; font-size: 44px; line-height: 1.08; }
+    .fg .badges { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 9px; }
     .fg .badge {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 14px; border-radius: 99px;
+      padding: 7px 13px; border-radius: 99px;
       background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
-      font-size: 14px; font-weight: 600; color: rgba(255,255,255,.86);
+      font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.86);
     }
     .fg .badge i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
-    .fg .phone-wrap { flex: none; align-self: flex-start; width: auto; height: auto; margin-top: 34px; }
+    .fg .phones { position: relative; width: 400px; height: 500px; flex: none; }
     .fg .phone {
-      --pw: 272px;
-      width: var(--pw);
-      transform: rotate(-3.5deg);
-      box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 22px 70px rgba(124,92,255,.5), 0 12px 30px rgba(0,0,0,.65);
+      position: absolute;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 22px 70px rgba(124,92,255,.45), 0 12px 30px rgba(0,0,0,.65);
     }
+    .fg .phone.back { --pw: 236px; width: var(--pw); right: 0; top: 54px; transform: rotate(5deg); opacity: .88; z-index: 1; }
+    .fg .phone.front { --pw: 256px; width: var(--pw); left: 10px; top: 28px; transform: rotate(-4deg); z-index: 2; }
     body.feature .g1 { width: 520px; height: 520px; left: -120px; top: -220px; filter: blur(110px); }
     body.feature .g2 { width: 460px; height: 460px; right: -40px; top: 80px; filter: blur(110px); background: rgba(124,92,255,.36); }
     body.feature .g3 { display: none; }
@@ -496,17 +503,21 @@
       document.body.classList.add("feature");
       const fg = document.createElement("div");
       fg.className = "fg";
-      fg.innerHTML = `<div class="txt"><div class="lg">${LOGO}Minder</div>
-        <h1>Minder sadece <span class="grad">kampüste olanlar</span> içindir.</h1>
+      fg.innerHTML = `<div class="txt">
+        <span class="pill-top">🎓 Üniversitene özel anonim ağ</span>
+        <div class="lg">${LOGO}Minder</div>
+        <h1>Sadece <span class="grad">kampüste olanlar</span> içindir.</h1>
         <div class="badges">
           <span class="badge"><i></i>DAÜ kampüs</span>
           <span class="badge"><i></i>%100 anonim</span>
           <span class="badge"><i></i>Sıfır kişisel veri</span>
-        </div></div>`;
-      const pw = document.querySelector(".phone-wrap");
-      fg.appendChild(pw);
+        </div></div>
+        <div class="phones">
+          <div class="phone back"><div class="screen"><div class="app">${feedScreen(true)}</div></div></div>
+          <div class="phone front"><div class="screen"><div class="app">${feedScreen(false)}</div></div></div>
+        </div>`;
+      document.querySelector(".phone-wrap").remove();
       document.body.appendChild(fg);
-      document.getElementById("app").innerHTML = feedScreen(false);
     } else {
       const S = SHOTS[shot] || SHOTS.feed;
       document.getElementById("h1").innerHTML = S.h;
@@ -515,13 +526,11 @@
     }
 
     function fit() {
-      const wrap = document.querySelector(".phone-wrap");
-      const phone = document.querySelector(".phone");
-      const scr = document.querySelector(".screen");
-      const app = document.getElementById("app");
       const baseW = platform === "ipad" ? 580 : 390;
       const baseH = platform === "ipad" ? 780 : 844;
       if (!document.body.classList.contains("feature")) {
+        const wrap = document.querySelector(".phone-wrap");
+        const phone = document.querySelector(".phone");
         const maxW = Math.min(wrap.clientWidth * 0.94, window.innerWidth * 0.84);
         const maxH = wrap.clientHeight;
         let ph = maxH;
@@ -534,9 +543,12 @@
         phone.style.width = pw + "px";
         phone.style.height = ph + "px";
       }
-      const k = scr.clientWidth / baseW;
-      app.style.transform = `scale(${k})`;
-      app.style.height = (scr.clientHeight / k) + "px";
+      document.querySelectorAll(".screen").forEach((scr) => {
+        const app = scr.querySelector(".app");
+        const k = scr.clientWidth / baseW;
+        app.style.transform = `scale(${k})`;
+        app.style.height = (scr.clientHeight / k) + "px";
+      });
     }
 
     fit();

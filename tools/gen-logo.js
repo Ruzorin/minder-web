@@ -1,105 +1,68 @@
-/* splash.png'den transparan arka planlı logo + favicon üretir.
+/* Minder karo logosunun tüm versiyonlarını üretir.
    Çalıştırma: node tools/gen-logo.js
-   Çıktılar:
-     public/logo.png            — transparan, header için (büyük)
-     public/favicon-32.png      — 32x32 favicon
-     public/apple-touch-icon.png— 180x180 Apple touch icon
-   Strateji: Koyu mavi arka plana chroma-key (yumuşak alpha) uygula,
-   logoyu crop et, çeşitli boyutlara ölçekle. */
-const Jimp = require("jimp");
+   Kaynak: aşağıdaki SVG tanımları (gemini-svg.svg ile aynı karo)
+
+   Web (şeffaf arka plan):
+     assets/img/logo.svg            — vektör, header için
+     assets/img/logo.png            — 512x512 şeffaf
+     assets/img/favicon-32.png      — 32x32 şeffaf (tarayıcı sekmesi)
+   App (koyu mor zemin, #181328):
+     assets/img/logo-app.svg        — vektör, yuvarlak zeminli (sticker)
+     assets/img/logo-app-round.png  — 512x512 yuvarlak zemin, köşeler şeffaf
+     assets/img/apple-touch-icon.png— 180x180 kare zemin (iOS köşeleri kendisi yuvarlar)
+     assets/img/favicon-192.png     — 192x192 kare zemin (Android/PWA)
+     assets/img/app-icon-512.png    — 512x512 kare zemin (Google Play)
+     assets/img/app-icon-1024.png   — 1024x1024 kare zemin (App Store) */
 const fs = require("fs");
 const path = require("path");
+const sharp = require("sharp");
 
-const SRC = "assets/img/splash.png";
-const OUT_DIR = "assets/img";
+const OUT = path.join(__dirname, "..", "assets", "img");
+const PURPLE = "#9A7BFF";
+const BG = "#181328";
 
-// Luminans tabanlı maskeleme: koyu (arka plan) -> transparan,
-// açık (logo) -> opak. Arka plan gradient olduğu için renk tabanlı
-// chroma-key yerine luminans eşiği daha güvenilir.
-const LOW = 110;  // luminans <= LOW -> tam transparan (arka plan)
-const HIGH = 170; // luminans >= HIGH -> tam opak (logo), arası yumuşak
-function luminance(r, g, b) {
-  return 0.299 * r + 0.587 * g + 0.114 * b;
+const defs =
+  `<defs><filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">` +
+  `<feGaussianBlur stdDeviation="2.5" result="blur"/>` +
+  `<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>` +
+  `</filter></defs>`;
+
+// glow=false: küçük boyutlar (favicon) için parlamasız, daha kalın ve net çizgi
+const diamondOf = (glow = true) => {
+  const f = glow ? ' filter="url(#neonGlow)"' : "";
+  const sw = glow ? 4 : 6;
+  return `<rect x="30" y="30" width="40" height="40" fill="none" stroke="${PURPLE}" stroke-width="${sw}" transform="rotate(45 50 50)"${f}/>` +
+    `<rect x="40" y="40" width="20" height="20" fill="${PURPLE}" transform="rotate(45 50 50)"${f}/>`;
+};
+
+const svg = (viewBox, bg, glow = true) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="1024" height="1024">${defs}${bg}${diamondOf(glow)}</svg>`;
+
+// Web: şeffaf, karo kadraja yakın
+const webSvg = svg("10 10 80 80", "");
+// App: yuvarlak koyu zemin (orijinal sticker)
+const roundSvg = svg("0 0 100 100", `<circle cx="50" cy="50" r="50" fill="${BG}"/>`);
+// App: kare koyu zemin (store ikonları — platform kendi maskesini uygular)
+const squareSvg = svg("0 0 100 100", `<rect width="100" height="100" fill="${BG}"/>`);
+
+async function png(src, size, name, opaque = false) {
+  let img = sharp(Buffer.from(src), { density: 600 }).resize(size, size);
+  if (opaque) img = img.flatten({ background: BG });
+  await img.png().toFile(path.join(OUT, name));
+  console.log(`${name}: ${size}x${size}`);
 }
 
 (async () => {
-  const img = await Jimp.read(SRC);
-  const w = img.bitmap.width;
-  const h = img.bitmap.height;
-  console.log("Kaynak:", w + "x" + h);
+  fs.mkdirSync(OUT, { recursive: true });
+  fs.writeFileSync(path.join(OUT, "logo.svg"), webSvg.replace(' width="1024" height="1024"', ""), "utf8");
+  fs.writeFileSync(path.join(OUT, "logo-app.svg"), roundSvg.replace(' width="1024" height="1024"', ""), "utf8");
+  console.log("logo.svg, logo-app.svg");
 
-  // 1) Luminans maskeleme: her piksele alpha uygula
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      const c = Jimp.intToRGBA(img.getPixelColor(x, y));
-      const lum = luminance(c.r, c.g, c.b);
-      let a;
-      if (lum <= LOW) a = 0;
-      else if (lum >= HIGH) a = 255;
-      else a = Math.round(((lum - LOW) / (HIGH - LOW)) * 255);
-      img.setPixelColor(Jimp.rgbaToInt(c.r, c.g, c.b, a), x, y);
-    }
-  }
-  console.log("Luminans maskeleme uygulandı.");
-
-  // 2) Opak piksellerin bounding box'ı
-  let minX = w, minY = h, maxX = 0, maxY = 0, found = false;
-  img.scan(0, 0, w, h, function (x, y, idx) {
-    const a = this.bitmap.data[idx + 3];
-    if (a > 20) {
-      found = true;
-      if (x < minX) minX = x;
-      if (y < minY) minY = y;
-      if (x > maxX) maxX = x;
-      if (y > maxY) maxY = y;
-    }
-  });
-  if (!found) throw new Error("Logo bulunamadı!");
-  console.log(`Logo bbox: (${minX},${minY})-(${maxX},${maxY})`);
-
-  // 3) Padding ile crop
-  const pad = Math.round((maxX - minX) * 0.08);
-  minX = Math.max(0, minX - pad);
-  minY = Math.max(0, minY - pad);
-  maxX = Math.min(w - 1, maxX + pad);
-  maxY = Math.min(h - 1, maxY + pad);
-  const cw = maxX - minX + 1;
-  const ch = maxY - minY + 1;
-  const cropped = img.clone().crop(minX, minY, cw, ch);
-  console.log("Crop:", cw + "x" + ch);
-
-  // 4) Çıktı klasörü
-  fs.mkdirSync(OUT_DIR, { recursive: true });
-
-  // 5) Header logo: uzun kenarı 160px, aspect ratio korunmuş
-  const LOGO_MAX = 160;
-  const scale = LOGO_MAX / Math.max(cw, ch);
-  const logoW = Math.round(cw * scale);
-  const logoH = Math.round(ch * scale);
-  const logo = cropped.clone().resize(logoW, logoH, Jimp.RESIZE_BILINEAR);
-  await logo.writeAsync(path.join(OUT_DIR, "logo.png"));
-  console.log(`logo.png: ${logoW}x${logoH}`);
-
-  // 6) Favicon 32x32 (kare, ortalanmış)
-  await writeSquare(cropped, 32, path.join(OUT_DIR, "favicon-32.png"));
-  console.log("favicon-32.png: 32x32");
-
-  // 7) Apple touch icon 180x180 (kare, ortalanmış)
-  await writeSquare(cropped, 180, path.join(OUT_DIR, "apple-touch-icon.png"));
-  console.log("apple-touch-icon.png: 180x180");
-
-  // 8) Ek: 192x192 (Android/PWA)
-  await writeSquare(cropped, 192, path.join(OUT_DIR, "favicon-192.png"));
-  console.log("favicon-192.png: 192x192");
+  await png(webSvg, 512, "logo.png");
+  await png(svg("14 14 72 72", "", false), 32, "favicon-32.png");
+  await png(roundSvg, 512, "logo-app-round.png");
+  await png(squareSvg, 180, "apple-touch-icon.png", true);
+  await png(squareSvg, 192, "favicon-192.png", true);
+  await png(squareSvg, 512, "app-icon-512.png", true);
+  await png(squareSvg, 1024, "app-icon-1024.png", true);
 })();
-
-// Logoyu kare bir tuvale ortalar (favicon için)
-async function writeSquare(src, size, outPath) {
-  const canvas = new Jimp(size, size, 0x00000000); // transparan
-  const s = Math.round(size * 0.78); // logoyu %78 oranında sığdır
-  const resized = src.clone().resize(s, s, Jimp.RESIZE_BILINEAR);
-  const x = Math.round((size - s) / 2);
-  const y = Math.round((size - s) / 2);
-  canvas.composite(resized, x, y);
-  await canvas.writeAsync(outPath);
-}

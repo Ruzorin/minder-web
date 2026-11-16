@@ -25,6 +25,7 @@ const center = DIM / 2;
 
 // Logo alanı (modül cinsinden temizlenecek daire)
 const logoSize = N * MODULE * LOGO_RATIO;
+// Mesafeyi kare-karo şeklinde (|dx|+|dy|) ölçerek logo çevresini karo biçiminde boşaltırız
 const clearRadius = logoSize / 2 + MODULE * 0.9;
 
 const finders = [[0, 0], [0, N - 7], [N - 7, 0]];
@@ -39,7 +40,7 @@ for (let r = 0; r < N; r++) {
     const y = (r + MARGIN) * MODULE;
     const dx = x + MODULE / 2 - center;
     const dy = y + MODULE / 2 - center;
-    if (Math.hypot(dx, dy) < clearRadius) continue; // logo alanını boş bırak
+    if (Math.abs(dx) + Math.abs(dy) < clearRadius + MODULE * 0.6) continue; // logo alanını (karo) boş bırak
     rects += `<rect x="${x}" y="${y}" width="${MODULE}" height="${MODULE}"/>`;
   }
 }
@@ -55,21 +56,21 @@ for (const [br, bc] of finders) {
     `<rect x="${x + 2 * MODULE}" y="${y + 2 * MODULE}" width="${3 * MODULE}" height="${3 * MODULE}" rx="${MODULE * 0.8}" fill="${EYE}"/>`;
 }
 
-// Minder karo logosu (gemini-svg.svg, viewBox 0 0 100 100)
-const scale = logoSize / 100;
-const lx = center - logoSize / 2;
+// Minder karo logosu — arka plansız (şeffaf), QR'ın beyaz zemini üzerinde.
+// Karo, viewBox 0..100'de yaklaşık 10..90 aralığını kaplar; bu yüzden 80 birimlik
+// alanı logoSize'a sığdırıyoruz.
+const scale = logoSize / 80;
+const lx = center - 50 * scale;
 const logo =
-  `<circle cx="${center}" cy="${center}" r="${clearRadius - MODULE * 0.3}" fill="#ffffff"/>` +
   `<g transform="translate(${lx} ${lx}) scale(${scale})">` +
-  `<circle cx="50" cy="50" r="50" fill="#181328"/>` +
-  `<rect x="30" y="30" width="40" height="40" fill="none" stroke="#9A7BFF" stroke-width="4" transform="rotate(45 50 50)" filter="url(#minderGlow)"/>` +
-  `<rect x="40" y="40" width="20" height="20" fill="#9A7BFF" transform="rotate(45 50 50)" filter="url(#minderGlow)"/>` +
+  `<rect x="30" y="30" width="40" height="40" fill="none" stroke="#8b68ff" stroke-width="5" transform="rotate(45 50 50)" filter="url(#minderGlow)"/>` +
+  `<rect x="40" y="40" width="20" height="20" fill="#8b68ff" transform="rotate(45 50 50)" filter="url(#minderGlow)"/>` +
   `</g>`;
 
 const svg =
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${DIM} ${DIM}" width="${DIM}" height="${DIM}" role="img" aria-label="Minder QR kodu">` +
   `<defs><filter id="minderGlow" x="-50%" y="-50%" width="200%" height="200%">` +
-  `<feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>` +
+  `<feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>` +
   `</filter></defs>` +
   `<rect width="${DIM}" height="${DIM}" fill="#ffffff"/>` +
   `<g fill="${DARK}" shape-rendering="crispEdges">${rects}</g>` +

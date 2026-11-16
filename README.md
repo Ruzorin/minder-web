@@ -95,10 +95,10 @@ Tarayıcıda `http://localhost:8000` adresini aç.
 `tools/` klasöründe, görsel asset'leri yeniden üretmek için Node.js scriptleri:
 
 ```bash
-# QR kod (dummy) üret
+# QR kod üret (ortası şeffaf karo logolu, https://minder.university)
 node tools/gen-qr.js
 
-# Logo + favicon üret (splash.png'den transparan arka planlı)
+# Karo logonun tüm versiyonlarını üret (web: şeffaf, app: koyu zemin)
 node tools/gen-logo.js
 
 # Logo görselini analiz et
@@ -120,11 +120,15 @@ minder-web/
 ├── style.css               # Izgara arka plan, animasyonlar
 ├── assets/
 │   └── img/
-│       ├── logo.png              # Transparan header logosu
-│       ├── favicon-32.png        # 32x32 favicon
-│       ├── favicon-192.png       # 192x192 (Android/PWA)
-│       ├── apple-touch-icon.png  # 180x180 (Apple)
-│       ├── qr-code.svg           # Dummy QR kod
+│       ├── logo.svg / logo.png   # Şeffaf karo logo (web header)
+│       ├── favicon-32.png        # 32x32 şeffaf favicon
+│       ├── logo-app.svg          # Koyu yuvarlak zeminli logo (vektör)
+│       ├── logo-app-round.png    # 512x512 koyu yuvarlak zemin
+│       ├── favicon-192.png       # 192x192 koyu zemin (Android/PWA)
+│       ├── apple-touch-icon.png  # 180x180 koyu zemin (Apple)
+│       ├── app-icon-512.png      # 512x512 koyu zemin (Google Play)
+│       ├── app-icon-1024.png     # 1024x1024 koyu zemin (App Store)
+│       ├── qr-code.svg           # Cihaza göre yönlendiren QR kod
 │       └── splash.png            # Orijinal logo kaynağı
 └── tools/
     ├── gen-qr.js                 # QR kod üretici

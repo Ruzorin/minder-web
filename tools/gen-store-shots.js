@@ -8,6 +8,8 @@
      assets/store/app-store/
        iphone-6.7-1290x2796/         (5 adet 1290x2796, 24-bit PNG)
        iphone-6.5-1284x2778/         (5 adet 1284x2778, 24-bit PNG)
+       ipad-13-2064x2752/            (5 adet 2064x2752, 24-bit PNG)
+       ipad-12.9-2048x2732/          (5 adet 2048x2732, 24-bit PNG)
        app-icon-1024x1024.png        (1024x1024, 24-bit PNG) */
 const fs = require("fs");
 const http = require("http");
@@ -60,6 +62,20 @@ const TARGETS = [
     width: 1284,
     height: 2778,
     platform: "ios",
+    items: SHOTS,
+  },
+  {
+    dir: path.join(STORE_DIR, "app-store", "ipad-13-2064x2752"),
+    width: 2064,
+    height: 2752,
+    platform: "ipad",
+    items: SHOTS,
+  },
+  {
+    dir: path.join(STORE_DIR, "app-store", "ipad-12.9-2048x2732"),
+    width: 2048,
+    height: 2732,
+    platform: "ipad",
     items: SHOTS,
   },
 ];

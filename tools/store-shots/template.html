@@ -4,8 +4,8 @@
      tools/gen-store-shots.js tarafından headless Chrome ile render edilir.
      Parametreler:
        ?shot=feed|locked|profile|compose|notifications|feature
-       ?platform=ios|play
-     Uygulama ekranı 390px tasarım genişliğinde kurulup hedef telefon boyutuna ölçeklenir.
+       ?platform=ios|play|ipad
+     Telefonlar 390x844, iPad 580x780 tasarım ölçeğinde kurulup hedef ekrana ölçeklenir.
      Gönderi ve yorum metinleri web sitesindeki gibi bulanıktır. -->
 <head>
   <meta charset="UTF-8" />
@@ -113,6 +113,47 @@
     }
     body.play .screen {
       border-radius: calc(var(--pw) * 0.080);
+    }
+
+    body.ipad .phone {
+      aspect-ratio: 580 / 780;
+      border-radius: calc(var(--pw) * 0.055);
+      padding: calc(var(--pw) * 0.022);
+    }
+    body.ipad .screen {
+      border-radius: calc(var(--pw) * 0.036);
+    }
+    body.ipad .app {
+      width: 580px;
+      height: 780px;
+    }
+    body.ipad .status {
+      height: 44px;
+      padding: 10px 30px 0 30px;
+      font-size: 14px;
+    }
+    body.ipad .topbar,
+    body.ipad .tabs,
+    body.ipad .list,
+    body.ipad .hdr,
+    body.ipad .ptitle,
+    body.ipad .who,
+    body.ipad .chips,
+    body.ipad .loc-row {
+      padding-left: 34px;
+      padding-right: 34px;
+    }
+    body.ipad .field,
+    body.ipad .ai {
+      margin-left: 34px;
+      margin-right: 34px;
+    }
+    body.ipad .nav {
+      height: 74px;
+      padding: 0 80px 16px;
+    }
+    body.ipad .home-bar {
+      width: 180px;
     }
 
     .app {
@@ -345,23 +386,29 @@
 
     const q = new URLSearchParams(location.search);
     const shot = q.get("shot") || "feed";
-    const platform = q.get("platform") === "play" ? "play" : "ios";
+    const pParam = q.get("platform");
+    const platform = (pParam === "play" || pParam === "ipad") ? pParam : "ios";
     document.body.classList.add(platform);
 
+    const iosWifi = `<svg width="15" height="11" viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.6 3.6 0 0 0-4.8 0zM3.3 6.3l1.3 1.6a5.3 5.3 0 0 1 6.8 0l1.3-1.6a7.4 7.4 0 0 0-9.4 0zM.8 3.3l1.3 1.6a9.3 9.3 0 0 1 11.8 0l1.3-1.6a11.3 11.3 0 0 0-14.4 0z" fill="#fff"/></svg>`;
+
     const statusBar = () => {
-      const notch = platform === "ios" ? '<div class="island"></div>' : '<div class="punch"></div>';
-      const time = platform === "ios" ? "9:41" : "12:30";
-      const sig = platform === "ios"
-        ? `<span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8.5px"></i><i style="height:11px"></i></span>`
-        : `<svg width="13" height="11" viewBox="0 0 13 11"><path d="M1 10h11V1z" fill="#fff"/></svg>`;
-      return `${notch}<div class="status"><span>${time}</span><span class="s-icons">
-        ${sig}
-        <svg width="15" height="11" viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.6 3.6 0 0 0-4.8 0zM3.3 6.3l1.3 1.6a5.3 5.3 0 0 1 6.8 0l1.3-1.6a7.4 7.4 0 0 0-9.4 0zM.8 3.3l1.3 1.6a9.3 9.3 0 0 1 11.8 0l1.3-1.6a11.3 11.3 0 0 0-14.4 0z" fill="#fff"/></svg>
-        <span class="batt"><i></i></span></span></div>`;
+      if (platform === "play") {
+        const notifIcon = `<svg width="11" height="11" viewBox="10 10 80 80" aria-hidden="true"><rect x="30" y="30" width="40" height="40" fill="none" stroke="rgba(255,255,255,.78)" stroke-width="7" transform="rotate(45 50 50)"/><rect x="40" y="40" width="20" height="20" fill="rgba(255,255,255,.78)" transform="rotate(45 50 50)"/></svg>`;
+        const androidWifi = `<svg width="14" height="12" viewBox="0 0 16 14"><path d="M8 2C4.5 2 1.4 3.4 0 5.7L8 13.5 16 5.7C14.6 3.4 11.5 2 8 2z" fill="#fff"/></svg>`;
+        const androidSig = `<svg width="13" height="12" viewBox="0 0 14 13"><path d="M1 12h12V1z" fill="rgba(255,255,255,.3)"/><path d="M1 12h9.5V3.5z" fill="#fff"/></svg>`;
+        const androidBatt = `<svg width="9" height="14" viewBox="0 0 10 15"><rect x="3" y="0" width="4" height="2" rx="0.8" fill="rgba(255,255,255,.7)"/><rect x="1" y="2" width="8" height="12.5" rx="1.8" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/><rect x="2.3" y="4.2" width="5.4" height="9" rx="1" fill="#fff"/></svg>`;
+        return `<div class="punch"></div><div class="status"><span style="display:inline-flex;align-items:center;gap:7px"><span>12:30</span>${notifIcon}</span><span class="s-icons" style="gap:5px">${androidWifi}<span style="font-size:11px;font-weight:800;letter-spacing:-.02em">5G</span>${androidSig}<span style="font-size:12px;font-weight:700">88%</span>${androidBatt}</span></div>`;
+      }
+      if (platform === "ipad") {
+        return `<div class="status"><span>9:41<span style="opacity:.65;font-weight:500;margin-left:8px;font-size:13px">Sal 16 Kas</span></span><span class="s-icons">${iosWifi}<span style="font-size:12px;font-weight:600">100%</span><span class="batt"><i></i></span></span></div>`;
+      }
+      const iosSig = `<span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8.5px"></i><i style="height:11px"></i></span>`;
+      return `<div class="island"></div><div class="status"><span>9:41</span><span class="s-icons">${iosSig}${iosWifi}<span class="batt"><i></i></span></span></div>`;
     };
 
     const nav = (a) => `<div class="nav">${a === 0 ? D_FILL : D_FILL_OFF}<div class="fab">+</div>${a === 2 ? D_LINE_ON : D_LINE}</div>`;
-    const homeBar = () => platform === "ios" ? '<div class="home-bar"></div>' : "";
+    const homeBar = () => (platform === "ios" || platform === "ipad") ? '<div class="home-bar"></div>' : "";
 
     const post = (av, color, name, when, cat, catColor, title, body, up, cnt, showBadge) => `
       <div class="card"><div class="meta"><div class="av" style="background:${color}">${av}</div>
@@ -472,20 +519,22 @@
       const phone = document.querySelector(".phone");
       const scr = document.querySelector(".screen");
       const app = document.getElementById("app");
+      const baseW = platform === "ipad" ? 580 : 390;
+      const baseH = platform === "ipad" ? 780 : 844;
       if (!document.body.classList.contains("feature")) {
         const maxW = Math.min(wrap.clientWidth * 0.94, window.innerWidth * 0.84);
         const maxH = wrap.clientHeight;
         let ph = maxH;
-        let pw = ph * (390 / 844);
+        let pw = ph * (baseW / baseH);
         if (pw > maxW) {
           pw = maxW;
-          ph = pw * (844 / 390);
+          ph = pw * (baseH / baseW);
         }
         phone.style.setProperty("--pw", pw + "px");
         phone.style.width = pw + "px";
         phone.style.height = ph + "px";
       }
-      const k = scr.clientWidth / 390;
+      const k = scr.clientWidth / baseW;
       app.style.transform = `scale(${k})`;
       app.style.height = (scr.clientHeight / k) + "px";
     }

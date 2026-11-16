@@ -8,8 +8,7 @@
 
   // --- Yapılandırma --------------------------------------------
   var REDIRECT_DELAY_MS = 2000; // 2 saniye
-  // App Store henüz yayında değil (onay bekliyor). Onaydan sonra buraya linki yaz:
-  var APP_STORE_URL = "#";
+  var APP_STORE_URL = "https://apps.apple.com/app/minder/id6796769214";
   var PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=university.minder.app&hl=tr";
 
   // --- DOM referansları ----------------------------------------

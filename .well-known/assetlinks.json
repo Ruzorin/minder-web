@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "university.minder.app",
+      "sha256_cert_fingerprints": [
+        "A8:1E:00:1B:36:CB:66:27:58:37:FE:F8:0E:CC:39:46:19:71:7D:72:9E:F3:90:32:77:46:81:A5:31:21:41:76"
+      ]
+    }
+  }
+]
+
